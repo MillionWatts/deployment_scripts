@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: millionwatts-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  tls:
+    - hosts:
+      - mohammad.dev
+      - api.mohammad.dev
+      - marcusboay.dev
+      # - api.marcusboay.dev
+      secretName: millionwatts-kubernetes-tls
+  rules:
+    - host: mohammad.dev
+      http:
+        paths:
+          - backend:
+              serviceName: modev
+              servicePort: 80
+    - host: api.mohammad.dev
+      http:
+        paths:
+          - path: /auth
+            backend:
+              serviceName: modev-auth
+              servicePort: 80
+    #       - path: /api/portfolio
+    #         backend:
+    #           serviceName: modev-portfolio
+    #           servicePort: 80
+    #       - path: /api/photography
+    #         backend:
+    #           serviceName: modev-photography
+    #           servicePort: 80
+    - host: marcusboay.dev
+      http:
+        paths:
+          - backend:
+              serviceName: marcusdev
+              servicePort: 80
