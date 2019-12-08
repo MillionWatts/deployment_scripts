@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: modev-deployment
+  name: modev
 spec:
   selector:
     matchLabels:
@@ -26,13 +26,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: modev-service
+  name: modev
   labels:
     run: modev-run
 spec:
   ports:
-  - port: 80
-    targetPort: 5002
-    protocol: TCP
+    - port: 80
+      targetPort: 5002
+      protocol: TCP
   selector:
     run: modev-run
