@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: marcusdev-deployment
+spec:
+  selector:
+    matchLabels:
+      app: marcusdev
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: marcusdev
+        run: marcusdev-run
+    spec:
+      containers:
+        - name: marcusboay-dev-website
+          image: marcusboay/marcusboay_dev_website:latest
+          resources: {}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: marcusdev-service
+  labels:
+    run: marcusdev-run
+spec:
+  ports:
+  - port: 80
+    targetPort: 5000
+    protocol: TCP
+  selector:
+    run: marcusdev-run

@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: modev-deployment
+spec:
+  selector:
+    matchLabels:
+      app: modev
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: modev
+        run: modev-run
+    spec:
+      containers:
+        - name: mo-dev-web
+          image: mohammaddev/mo_dev_web:latest
+          resources: {}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5002
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: modev-service
+  labels:
+    run: modev-run
+spec:
+  ports:
+  - port: 80
+    targetPort: 5002
+    protocol: TCP
+  selector:
+    run: modev-run
