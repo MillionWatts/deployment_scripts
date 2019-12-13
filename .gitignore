@@ -1,1 +1,2 @@
-secrets.yaml
+secrets/secrets.yaml
+db/dbinstall.sh
