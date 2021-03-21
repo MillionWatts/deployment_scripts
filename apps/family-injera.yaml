@@ -1,0 +1,90 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: family-injera-sql
+spec:
+  selector:
+    matchLabels:
+      app: family-injera-sql
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: family-injera-sql
+        run: family-injera-sql-run
+    spec:
+      containers:
+        - name: family-injera-sql
+          image: mcr.microsoft.com/mssql/server:2019-latest
+          resources: {}
+          imagePullPolicy: Always
+          env:
+            - name: ACCEPT_EULA
+              value: "Y"
+            - name: SA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: family-injera-secrets
+                  key: sql-cs
+          ports:
+            - containerPort: 1433
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: family-injera-sql
+  labels:
+    run: family-injera-sql-run
+spec:
+  ports:
+    - port: 1433
+      targetPort: 1433
+      protocol: TCP
+  selector:
+    run: family-injera-sql-run
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: family-injera
+spec:
+  selector:
+    matchLabels:
+      app: family-injera
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: family-injera
+        run: family-injera-run
+    spec:
+      containers:
+        - name: family-injera
+          image: mohammaddev/family-injera-web
+          resources: {}
+          imagePullPolicy: Always
+          env:
+            - name: ADM_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: family-injera-secrets
+                  key: adm-pass
+          ports:
+            - containerPort: 1433
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: family-injera
+  labels:
+    run: family-injera-run
+spec:
+  ports:
+    - port: 1433
+      targetPort: 1433
+      protocol: TCP
+  selector:
+    run: family-injera-run

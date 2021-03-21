@@ -8,15 +8,19 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS"
-    nginx.ingress.kubernetes.io/cors-allow-origin: "https://mohammad.dev/"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
     nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
 spec:
   tls:
     - hosts:
       - mohammad.dev
-      - api.mohammad.dev
-      - marcusboay.dev
-      # - api.marcusboay.dev
+      - craftingwiththesquad.mohammad.dev
+      # - family-injera.mohammad.dev
+      # - api.mohammad.dev
+      # - alpha.mohammad.dev
+      # - api.alpha.mohammad.dev
+      # - sso.mohammad.dev
+      # - dashboard.mohammad.dev
       secretName: millionwatts-kubernetes-tls
   rules:
     - host: mohammad.dev
@@ -25,24 +29,36 @@ spec:
           - backend:
               serviceName: modev
               servicePort: 80
-    - host: api.mohammad.dev
-      http:
-        paths:
-          - path: /auth
-            backend:
-              serviceName: modev-auth
-              servicePort: 80
-          - path: /portfolio
-            backend:
-              serviceName: modev-portfolio
-              servicePort: 80
-          - path: /photography
-            backend:
-              serviceName: modev-photography
-              servicePort: 80
-    - host: marcusboay.dev
-      http:
-        paths:
-          - backend:
-              serviceName: marcusdev
-              servicePort: 80
+    # - host: craftingwiththesquad.mohammad.dev
+    #   http:
+    #     paths:
+    #       - backend:
+    #           serviceName: craftingwiththesquad
+    #           servicePort: 25565
+    # - host: family-injera.mohammad.dev
+    #   http:
+    #     paths:
+    #       - backend:
+    #           serviceName: family-injera
+    #           servicePort: 80
+    # - host: alpha.mohammad.dev
+    #   http:
+    #     paths:
+    #       - backend:
+    #           serviceName: alpha-modev
+    #           servicePort: 80
+    # - host: api.mohammad.dev
+    #   http:
+    #     paths:
+    #       - path: /auth
+    #         backend:
+    #           serviceName: modev-auth
+    #           servicePort: 80
+    #       - path: /portfolio
+    #         backend:
+    #           serviceName: modev-portfolio
+    #           servicePort: 80
+    #       - path: /photography
+    #         backend:
+    #           serviceName: modev-photography
+    #           servicePort: 80

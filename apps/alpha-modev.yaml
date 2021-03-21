@@ -2,37 +2,37 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: marcusdev
+  name: alpha-modev
 spec:
   selector:
     matchLabels:
-      app: marcusdev
+      app: alpha-modev
   replicas: 2
   template:
     metadata:
       labels:
-        app: marcusdev
-        run: marcusdev-run
+        app: alpha-modev
+        run: alpha-modev-run
     spec:
       containers:
-        - name: marcusboay-dev-website
-          image: marcusboay/marcusboay_dev_website:latest
+        - name: mo-dev-web
+          image: mohammaddev/mo_dev_web:alpha
           resources: {}
           imagePullPolicy: Always
           ports:
-            - containerPort: 5000
+            - containerPort: 5002
               protocol: TCP
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: marcusdev
+  name: alpha-modev
   labels:
-    run: marcusdev-run
+    run: alpha-modev-run
 spec:
   ports:
-  - port: 80
-    targetPort: 5000
-    protocol: TCP
+    - port: 80
+      targetPort: 5002
+      protocol: TCP
   selector:
-    run: marcusdev-run
+    run: alpha-modev-run
