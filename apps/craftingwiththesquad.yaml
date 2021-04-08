@@ -1,27 +1,27 @@
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Pod
 metadata:
   name: craftingwiththesquad
+  labels:
+    app: craftingwiththesquad
+    run: craftingwiththesquad-run
 spec:
-  selector:
-    matchLabels:
-      app: craftingwiththesquad
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: craftingwiththesquad
-        run: craftingwiththesquad-run
-    spec:
-      containers:
-        - name: craftingwiththesquad
-          image: mohammaddev/ftb:3.4.0
-          resources: {}
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 25565
-              protocol: TCP
+  volumes:
+    - name: craftingwiththesquad-pv-storage
+      persistentVolumeClaim:
+        claimName: craftingwiththesquad-pv-claim
+  containers:
+    - name: craftingwiththesquad
+      image: mohammaddev/ftb:3.4.0
+      resources: {}
+      imagePullPolicy: Always
+      volumeMounts:
+        - mountPath: "/ftb-server-files/backups"
+          name: craftingwiththesquad-pv-storage
+      ports:
+        - containerPort: 25565
+          protocol: TCP
 ---
 apiVersion: v1
 kind: Service
@@ -36,4 +36,4 @@ spec:
       protocol: TCP
       name: craftingwiththesquad
   selector:
-    run: craftingwiththesquad-run
+    run: craftingwiththesquad2-run
