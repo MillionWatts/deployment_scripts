@@ -1,0 +1,70 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: modev-server
+spec:
+  selector:
+    matchLabels:
+      app: modev-server
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: modev-server
+        run: modev-server-run
+    spec:
+      containers:
+        - name: mo-dev-server
+          image: mohammaddev/mo-dev-server:latest
+          resources: {}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+          env:
+            - name: MYSQL_CS
+              valueFrom:
+                secretKeyRef:
+                  name: modev-web
+                  key: sql-cs
+            - name: HASHED_ADMIN_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: modev-web
+                  key: hashed-admin-pass
+            - name: MODEV_S3_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: modev-web
+                  key: modev-s3-endpoint
+            - name: MODEV_S3_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: modev-web
+                  key: modev-s3-bucket
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: modev-web
+                  key: aws-access-key-id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: modev-web
+                  key: aws-secret-access-key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: modev-server
+  labels:
+    run: modev-server-run
+spec:
+  ports:
+    - port: 80
+      targetPort: 5000
+      protocol: TCP
+  selector:
+    run: modev-server-run
+    
